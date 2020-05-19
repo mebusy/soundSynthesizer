@@ -36,4 +36,18 @@ The human hearing range is about 20Hz to 20kHz,  so 44100 is little bit more tha
 
 every douling in frequency moves you up 1 octave.
 
+---
+
+If you have really large amplitudes and very low frequencies, you could easily damage your speakers or headphones. 
+
+
+- How to generate triangle wave?
+    - ![](imgs/sound_triangle_wave.png)
+
+- How to generate saw wave ?
+    - ![](imgs/sound_saw_wave.png)
+    - however anding up sine waves in this manner is grossly inefficient for a computer so we can also apply a hack to this using a mod function to simulate the addition of all of the sine waves, to give us a perfect piecewise linear approximation. 
+    - ![](imgs/sound_saw_wave2.png)
+
+
 

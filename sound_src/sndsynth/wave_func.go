@@ -2,21 +2,81 @@ package sndsynth
 
 import (
     "math"
+    "math/rand"
 )
 
-func NoiseSine( freq float64 , x float64 ) float64 {
-    return 0.3 * math.Sin( freq * 2*math.Pi * x  )
+const (
+    WAVE_SINE int = iota
+    WAVE_SQUARE
+    WAVE_TRIANGLE
+    WAVE_SAW_SLOW
+    WAVE_SAW_FAST
+    WAVE_RANDOM_NOISE
+)
+
+// convert frequency (Hz) to angular velocity
+func w( hz float64 ) float64 {
+    return hz * 2 * math.Pi
 }
 
+// Oscillator
+func osc( hz, dTime float64, nType int )  float64 {
 
+    switch nType {
+    case WAVE_SINE:
+        return math.Sin( w(hz) * dTime )
+    case WAVE_SQUARE:
+        if math.Sin( w(hz) * dTime ) > 0 {
+            return 1
+        } else {
+            return -1
+        }
+    case WAVE_TRIANGLE:
+        return math.Asin(  math.Sin( w(hz) * dTime ) *2 / math.Pi )
+    case WAVE_SAW_SLOW:
+        var output float64 = 0
+        var n float64
+        for n=1.0; n<100.0; n++ {
+            output += -math.Sin( n*w(hz)*dTime ) / n
+        }
+        return output * 2 / math.Pi
+    case WAVE_SAW_FAST:
+        return (2/math.Pi) * ( hz *math.Pi * math.Mod( dTime, 1.0/hz ) - (math.Pi/2.0)  )
+    case WAVE_RANDOM_NOISE:
+        return 2*rand.Float64() - 1.0
 
-func NoiseSquare( freq float64 , x float64 ) float64 {
-    output :=  math.Sin( freq * 2*math.Pi * x  )
-    if output > 0 {
-        return 0.2
-    } else {
-        return -0.2
+    default:
+        return 0
     }
 }
 
+func NoiseSine( freq float64 , x float64 ) float64 {
+    output := osc( freq, x, WAVE_SINE  )
+    var ampl float64 = 0.4
+    return output *  ampl + ampl
+}
+
+func NoiseSquare( freq float64 , x float64 ) float64 {
+    output := osc( freq, x, WAVE_SQUARE  )
+    var ampl float64 = 0.2
+    return output *  ampl + ampl
+}
+
+func NoiseTriangle( freq float64 , x float64 ) float64 {
+    output := osc( freq, x, WAVE_TRIANGLE  )
+    var ampl float64 = 0.4
+    return output *  ampl + ampl
+}
+
+func NoiseSaw( freq float64 , x float64 ) float64 {
+    output := osc( freq, x, WAVE_SAW_FAST  )
+    var ampl float64 = 0.4
+    return output *  ampl + ampl
+}
+
+func NoiseRandom( freq float64 , x float64 ) float64 {
+    output := osc( freq, x, WAVE_RANDOM_NOISE  )
+    var ampl float64 = 0.4
+    return output *  ampl + ampl
+}
 

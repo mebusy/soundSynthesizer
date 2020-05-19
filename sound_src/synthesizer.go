@@ -23,8 +23,8 @@ func main()  {
     wg.Add(1)
     go func() {
         defer wg.Done()
-        var freqC   float64 = 220
-        if err := player.PlayFreq( freqC, 1*time.Second, sndsynth.NoiseSquare); err != nil {
+        var freqC   float64 = 440
+        if err := player.PlayFreq( freqC, 3*time.Second, sndsynth.NoiseRandom); err != nil {
             panic(err)
         }
     }()

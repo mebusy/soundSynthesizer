@@ -63,7 +63,7 @@ func (s *Wave) Read(buf []byte) (int, error) {
     case 1:
         for i := 0; i < len(buf)/num; i++ {
             const max = 255
-            b := int(s.noise_func( s.freq, float64(p)/float64(sampleRate) ) *max) + (max+1)/2
+            b := int(s.noise_func( s.freq, float64(p)/float64(sampleRate) ) *max)
             for ch := 0; ch < channelNum; ch++ {
                 buf[num*i+ch] = byte(b)
             }
@@ -73,7 +73,7 @@ func (s *Wave) Read(buf []byte) (int, error) {
         for i := 0; i < len(buf)/num; i++ {
             const max = 32767
             // b := int16(math.Sin(2*math.Pi*float64(p)/length) * 0.3 * max)
-            b := int(s.noise_func( s.freq, float64(p)/float64(sampleRate) ) *max) + (max+1)/2
+            b := int(s.noise_func( s.freq, float64(p)/float64(sampleRate) ) *max)
             for ch := 0; ch < channelNum; ch++ {
                 buf[num*i+2*ch] = byte(b)
                 buf[num*i+1+2*ch] = byte(b >> 8)
