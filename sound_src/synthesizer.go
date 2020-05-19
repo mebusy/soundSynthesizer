@@ -24,7 +24,7 @@ func main()  {
     go func() {
         defer wg.Done()
         var freqC   float64 = 220
-        if err := player.PlayFreq( freqC, 1*time.Second); err != nil {
+        if err := player.PlayFreq( freqC, 1*time.Second, sndsynth.NoiseSine); err != nil {
             panic(err)
         }
     }()

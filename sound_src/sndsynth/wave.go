@@ -16,7 +16,7 @@ type Wave struct {
     noise_func NOISE_FUNC
 }
 
-func NewSineWave(freq float64, duration time.Duration) *Wave {
+func NewWave(freq float64, duration time.Duration, _func NOISE_FUNC ) *Wave {
     // total bytes used for play such piece sound
     l := int64(channelNum) * int64(bitDepthInBytes) * int64(sampleRate) * int64(duration) / int64(time.Second)
     // l = l / 4 * 4
@@ -24,9 +24,11 @@ func NewSineWave(freq float64, duration time.Duration) *Wave {
     return &Wave{
         freq:   freq,
         length: l,   // total bytes
-        noise_func: NoiseSine,
+        noise_func: _func ,
     }
 }
+
+
 
 func (s *Wave) Read(buf []byte) (int, error) {
     if len(s.remaining) > 0 {

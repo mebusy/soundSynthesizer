@@ -39,9 +39,9 @@ func NewSoundPlayer(_sampleRate, _channelNum, _bitDepthInBytes, _buffSizeInBytes
     return sp
 }
 
-func (self *SoundPlayer) PlayFreq( freq float64, duration time.Duration) error {
+func (self *SoundPlayer) PlayFreq( freq float64, duration time.Duration, _func NOISE_FUNC) error {
     p := self.context.NewPlayer()
-    s := NewSineWave(freq, duration)
+    s := NewWave(freq, duration, _func)
     if _, err := io.Copy(p, s); err != nil {
         return err
     }
