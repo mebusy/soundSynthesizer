@@ -2,29 +2,33 @@ package sndsynth
 
 import (
     "time"
-    "math"
     "io"
 )
 
-type SineWave struct {
+type NOISE_FUNC func( float64,float64 ) float64
+
+type Wave struct {
     freq   float64
     length int64
     pos    int64
 
     remaining []byte
+    noise_func NOISE_FUNC
 }
 
-func NewSineWave(freq float64, duration time.Duration) *SineWave {
+func NewSineWave(freq float64, duration time.Duration) *Wave {
+    // total bytes used for play such piece sound
     l := int64(channelNum) * int64(bitDepthInBytes) * int64(sampleRate) * int64(duration) / int64(time.Second)
     // l = l / 4 * 4
-    l &^= 3
-    return &SineWave{
+    l &^= 3  // protect the case that channelNum=2 and bitDepthInBytes=2
+    return &Wave{
         freq:   freq,
-        length: l,
+        length: l,   // total bytes
+        noise_func: NoiseSine,
     }
 }
 
-func (s *SineWave) Read(buf []byte) (int, error) {
+func (s *Wave) Read(buf []byte) (int, error) {
     if len(s.remaining) > 0 {
         n := copy(buf, s.remaining)
         s.remaining = s.remaining[n:]
@@ -47,24 +51,27 @@ func (s *SineWave) Read(buf []byte) (int, error) {
         buf = make([]byte, len(origBuf)+4-len(origBuf)%4)
     }
 
-    length := float64(sampleRate) / float64(s.freq)
-
+    // each period will be sampled `length` times
+    // length := float64(sampleRate) / float64(s.freq)
+    // `num` is bytes for each sample
     num := (bitDepthInBytes) * (channelNum)
+    // postion in sample unit
     p := s.pos / int64(num)
     switch bitDepthInBytes {
     case 1:
         for i := 0; i < len(buf)/num; i++ {
-            const max = 127
-            b := int(math.Sin(2*math.Pi*float64(p)/length) * 0.3 * max)
+            const max = 255
+            b := int(s.noise_func( s.freq, float64(p)/float64(sampleRate) ) *max) + (max+1)/2
             for ch := 0; ch < channelNum; ch++ {
-                buf[num*i+ch] = byte(b + 128)
+                buf[num*i+ch] = byte(b)
             }
             p++
         }
     case 2:
         for i := 0; i < len(buf)/num; i++ {
             const max = 32767
-            b := int16(math.Sin(2*math.Pi*float64(p)/length) * 0.3 * max)
+            // b := int16(math.Sin(2*math.Pi*float64(p)/length) * 0.3 * max)
+            b := int(s.noise_func( s.freq, float64(p)/float64(sampleRate) ) *max) + (max+1)/2
             for ch := 0; ch < channelNum; ch++ {
                 buf[num*i+2*ch] = byte(b)
                 buf[num*i+1+2*ch] = byte(b >> 8)
