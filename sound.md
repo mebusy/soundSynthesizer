@@ -32,4 +32,8 @@ samplerate , the 44100, is really used to store the accuracy of the frequency.  
 
 The human hearing range is about 20Hz to 20kHz,  so 44100 is little bit more than double 20k Hz, which means we should be able to in the most extreme cases capture with some accuracy 20k Hz signal. 
 
+---
+
+every douling in frequency moves you up 1 octave.
+
 

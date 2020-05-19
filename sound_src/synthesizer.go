@@ -24,21 +24,11 @@ func main()  {
     go func() {
         defer wg.Done()
         var freqC   float64 = 220
-        if err := player.PlayFreq( freqC, 1*time.Second, sndsynth.NoiseSine); err != nil {
+        if err := player.PlayFreq( freqC, 1*time.Second, sndsynth.NoiseSquare); err != nil {
             panic(err)
         }
     }()
 
-    /*
-    wg.Add(1)
-    go func() {
-        defer wg.Done()
-        var freqC   float64 = 2000
-        if err := player.PlayFreq( freqC, 1*time.Second); err != nil {
-            panic(err)
-        }
-    }()
-    //*/
 
 
     wg.Wait()
