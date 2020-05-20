@@ -50,4 +50,16 @@ If you have really large amplitudes and very low frequencies, you could easily d
     - ![](imgs/sound_saw_wave2.png)
 
 
+**Square Pulse Wave**
+
+the ratio of the low pulse and hight pulse , is called the **duty cycle**.  This adds texture to the sound.
+
+- How to generate square pulse wave ?
+    1. create 2 saw wave y1,y2
+    2. shift the phase of y2
+    3. subtract  y = y1-y2
+    4. changing the phase (P) will cause different duty cycle.
+        - ![](imgs/sound_square_pulse_wave.png)
+        - it does have a little bit of DC offset, but in audio that's not very important. It's only the change that matters that's what we hear coming out of the speakers. 
+
 
