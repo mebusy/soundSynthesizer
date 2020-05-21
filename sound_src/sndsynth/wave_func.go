@@ -79,6 +79,7 @@ func NoiseRandom( freq float64 , x float64 ) float64 {
     output := osc( freq, x, WAVE_RANDOM_NOISE  )
     var ampl float64 = 0.4
     return output *  ampl + ampl
+    // return output
 }
 
 var fFrequency float64 = 440
