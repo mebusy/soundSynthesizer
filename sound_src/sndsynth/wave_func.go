@@ -81,15 +81,15 @@ func NoiseRandom( freq float64 , x float64 ) float64 {
 }
 
 var fFrequency float64 = 440
-var fDutyCycle float64 = 0.5
-var fHarmonics float64 = 20
+var fDutyCycle float64 = 0.1
+var fHarmonics float64 = 20  // "2" will sound like a sine wave
 
 func sampleSqaureWave( f, t float64 ) float64 {
     var a float64  // a,b represent the sample values of the underlying sine wave forms
     var b float64
     var p float64 = fDutyCycle * 2 * math.Pi
 
-    for n := 1.0; n< fHarmonics ; n++ {
+    for n := 1.0; n < fHarmonics ; n++ {
         c := n * f * 2.0 * math.Pi * t
         a += math.Sin( c ) / n
         b += math.Sin( c - p*n ) / n

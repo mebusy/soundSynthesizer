@@ -61,5 +61,10 @@ the ratio of the low pulse and hight pulse , is called the **duty cycle**.  This
     4. changing the phase (P) will cause different duty cycle.
         - ![](imgs/sound_square_pulse_wave.png)
         - it does have a little bit of DC offset, but in audio that's not very important. It's only the change that matters that's what we hear coming out of the speakers. 
+        - 送给声卡的声音数据是无符号数据，如果是8bit数据， 只要完整的波形是在 0~255 之间，Y轴上的偏移对声音并不会有影响
+
+---
+
+- Changing frequency is going to sound terrible. That is because changing frequency of a playing waveform actually requires a little bit more sophistication. 
 
 
