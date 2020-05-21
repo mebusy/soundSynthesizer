@@ -62,6 +62,7 @@ the ratio of the low pulse and hight pulse , is called the **duty cycle**.  This
         - ![](imgs/sound_square_pulse_wave.png)
         - it does have a little bit of DC offset, but in audio that's not very important. It's only the change that matters that's what we hear coming out of the speakers. 
         - 送给声卡的声音数据是无符号数据，如果是8bit数据， 只要完整的波形是在 0~255 之间，Y轴上的偏移对声音并不会有影响
+        - 注意: 这里的算法，产生的波形，振幅会达到 [-4,4]
 
 ---
 
