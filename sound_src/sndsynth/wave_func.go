@@ -3,6 +3,7 @@ package sndsynth
 import (
     "math"
     "math/rand"
+    "fmt"
 )
 
 const (
@@ -81,7 +82,7 @@ func NoiseRandom( freq float64 , x float64 ) float64 {
 }
 
 var fFrequency float64 = 440
-var fDutyCycle float64 = 0.1
+var fDutyCycle float64 = 0.2
 var fHarmonics float64 = 20  // "2" will sound like a sine wave
 
 func sampleSqaureWave( f, t float64 ) float64 {
@@ -94,12 +95,15 @@ func sampleSqaureWave( f, t float64 ) float64 {
         a += math.Sin( c ) / n
         b += math.Sin( c - p*n ) / n
     }
-    return (2 / math.Pi) * (a-b)
+    return (2 / math.Pi) * (a-b)  * 0.48  // y1+y2 may generate wave form with ampl ±2.x
 }
 
 func NoiseSquarePulse( freq float64 , x float64 ) float64 {
     output := sampleSqaureWave( freq, x )
+    if output < -0.99999 || output > 0.99999 {
+        panic( fmt.Sprintf( "%.5f", output ) )
+    }
     var ampl float64 = 0.2
-    return output *  ampl + ampl*2   // output sometimes < -1 or > 1
+    return output *  ampl + ampl   // output sometimes < -1 or > 1
 }
 
