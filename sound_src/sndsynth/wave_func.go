@@ -80,3 +80,26 @@ func NoiseRandom( freq float64 , x float64 ) float64 {
     return output *  ampl + ampl
 }
 
+var fFrequency float64 = 440
+var fDutyCycle float64 = 0.5
+var fHarmonics float64 = 20
+
+func sampleSqaureWave( f, t float64 ) float64 {
+    var a float64  // a,b represent the sample values of the underlying sine wave forms
+    var b float64
+    var p float64 = fDutyCycle * 2 * math.Pi
+
+    for n := 1.0; n< fHarmonics ; n++ {
+        c := n * f * 2.0 * math.Pi * t
+        a += math.Sin( c ) / n
+        b += math.Sin( c - p*n ) / n
+    }
+    return (2 / math.Pi) * (a-b)
+}
+
+func NoiseSquarePulse( freq float64 , x float64 ) float64 {
+    output := sampleSqaureWave( freq, x )
+    var ampl float64 = 0.2
+    return output *  ampl + ampl*2   // output sometimes < -1 or > 1
+}
+

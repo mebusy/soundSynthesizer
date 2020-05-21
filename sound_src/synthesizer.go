@@ -12,9 +12,9 @@ import (
 
 func main()  {
     sampleRate := 44100
-    channelNum := 1
+    channelNum := 2
     bitDepthInBytes := 1
-    buffSizeInBytes := 4096
+    buffSizeInBytes := 512
 
     player := sndsynth.NewSoundPlayer( sampleRate, channelNum, bitDepthInBytes, buffSizeInBytes )
 
@@ -24,7 +24,7 @@ func main()  {
     go func() {
         defer wg.Done()
         var freqC   float64 = 440
-        if err := player.PlayFreq( freqC, 3*time.Second, sndsynth.NoiseRandom); err != nil {
+        if err := player.PlayFreq( freqC, 3*time.Second, sndsynth.NoiseSquarePulse); err != nil {
             panic(err)
         }
     }()
